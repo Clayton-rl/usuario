@@ -2,12 +2,11 @@ package com.javanautausuario.controller;
 
 import com.javanautausuario.business.UsuarioService;
 import com.javanautausuario.business.dtos.UsuarioDTO;
+import com.javanautausuario.business.dtos.UsuarioLoginDTO;
+import com.javanautausuario.infrastructure.entity.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +18,21 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<UsuarioDTO> salvarUsuario(@RequestBody UsuarioDTO dto) {
         return ResponseEntity.ok(usuarioService.salvarUsuario(dto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UsuarioLoginDTO dto) {
+        return ResponseEntity.ok(usuarioService.login(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@RequestParam("email") String email) {
+        return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> deletarUsuarioPorEmail(@PathVariable String email) {
+        usuarioService.deletarUsuarioPorEmail(email);
+        return ResponseEntity.ok().build();
     }
 }

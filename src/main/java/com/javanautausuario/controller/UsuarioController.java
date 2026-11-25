@@ -1,9 +1,10 @@
 package com.javanautausuario.controller;
 
 import com.javanautausuario.business.UsuarioService;
+import com.javanautausuario.business.dtos.EnderecoDTO;
+import com.javanautausuario.business.dtos.TelefoneDTO;
 import com.javanautausuario.business.dtos.UsuarioDTO;
 import com.javanautausuario.business.dtos.UsuarioLoginDTO;
-import com.javanautausuario.infrastructure.entity.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@RequestParam("email") String email) {
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
     }
 
@@ -34,5 +35,23 @@ public class UsuarioController {
     public ResponseEntity<Void> deletarUsuarioPorEmail(@PathVariable String email) {
         usuarioService.deletarUsuarioPorEmail(email);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDTO> atualizarDadosUsuario(@RequestBody UsuarioDTO dto,
+                                                    @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(usuarioService.atualizarDadosUsuario(dto, token));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizarDadosEndereco(@RequestBody EnderecoDTO dto,
+                                                              @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizarDadosEndereco(dto, id));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizarDadosTelefone(@RequestBody TelefoneDTO dto,
+                                                              @RequestParam("id") Long id) {
+        return ResponseEntity.ok(usuarioService.atualizarDadosTelefone(dto, id));
     }
 }
